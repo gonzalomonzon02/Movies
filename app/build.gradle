@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -30,9 +31,27 @@ android {
         jvmTarget = '11'
     }
     namespace 'com.gonzalo.monzon.movies'
+
+    flavorDimensions "env"
+    productFlavors {
+        prod {
+            resValue "string", "app_name", "Movies"
+            buildConfigField 'String', 'BASE_URL', '"https://api.themoviedb.org/3/"'
+            buildConfigField 'String', 'API_KEY', '"c6627bcc5c8ad118908fc5295f4e174d"'
+        }
+
+        dev {
+            resValue "string", "app_name", "Movies Dev"
+            buildConfigField 'String', 'BASE_URL', '"https://api.themoviedb.org/3/"'
+            buildConfigField 'String', 'API_KEY', '"c6627bcc5c8ad118908fc5295f4e174d"'
+            applicationIdSuffix ".dev"
+        }
+    }
 }
 
 dependencies {
+    def retrofit_version = '2.9.0'
+    def koin_version = '3.3.3'
 
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -41,4 +60,12 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+
+    // Dependency Injection
+    implementation "io.insert-koin:koin-android:$koin_version"
+
 }
